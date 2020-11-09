@@ -16,18 +16,22 @@ const checkComplete = (tasksStatus: Status[]) => ItemState;
  * @returns Returns a current task with its status by the challenge id
  */
 // type GetCurrentTask = (id: number) => ActualTask;
-export const getCurrentTask = (id: number, challenges: Challenge[]): ActualTask | string => {
-  let result: any = {}
-  const currentChallenge = challenges.find(i => i.id === id);
-  if (!currentChallenge) return 'Challenge with this id does not exist!'
+export const getCurrentTask = (
+  id: number,
+  challenges: Challenge[]
+): ActualTask | string => {
+  let result: any = {};
+  const currentChallenge = challenges.find((i) => i.id === id);
+  if (!currentChallenge) return 'Challenge with this id does not exist!';
 
-  const actualTaskNumber = (new Date()).getDate() - new Date(currentChallenge?.startDate).getDate();
+  const actualTaskNumber =
+    new Date().getDate() - new Date(currentChallenge?.startDate).getDate();
 
   result = currentChallenge.tasksOrder[actualTaskNumber];
   result.state = currentChallenge.tasksStatus[actualTaskNumber];
 
   return result;
-}
+};
 
 /**
  *
@@ -56,7 +60,6 @@ type getAchievements = (id: number) => ActualAchievement[];
 // return result;
 // }
 
-
 /**
  *
  * @param id - id of current challenge
@@ -64,17 +67,23 @@ type getAchievements = (id: number) => ActualAchievement[];
  * @returns Returns all past tasks with their results by the challenge id
  */
 // type GetTaskArchive = (id: number) => ArchiveItem[];
-export const getTaskArchive = (id: number, challenges: Challenge[]): ArchiveItem[] | string => {
+export const getTaskArchive = (
+  id: number,
+  challenges: Challenge[]
+): ArchiveItem[] | string => {
+  const currentChallenge = challenges.find((i) => i.id === id);
+  if (!currentChallenge) return 'Challenge with this id does not exist!';
 
-  const currentChallenge = challenges.find(i => i.id === id);
-  if (!currentChallenge) return 'Challenge with this id does not exist!'
-
-  const actualTaskNumber = (new Date()).getDate() - new Date(currentChallenge?.startDate).getDate();
+  const actualTaskNumber =
+    new Date().getDate() - new Date(currentChallenge?.startDate).getDate();
 
   const finishedTasks = currentChallenge.tasksOrder.slice(0, actualTaskNumber);
-  let finishedTasksStatus = currentChallenge.tasksStatus.slice(0, actualTaskNumber)
+  const finishedTasksStatus = currentChallenge.tasksStatus.slice(
+    0,
+    actualTaskNumber
+  );
 
-  let result: ArchiveItem[] = [];
+  const result: ArchiveItem[] = [];
 
   for (let i = 0; i < finishedTasks.length; i++) {
     result.push({
@@ -84,12 +93,11 @@ export const getTaskArchive = (id: number, challenges: Challenge[]): ArchiveItem
         state: finishedTasksStatus[i].state,
         updated: finishedTasksStatus[i].updated
       }
-    })
+    });
   }
 
   return result;
-}
-
+};
 
 /**
  * 
@@ -111,14 +119,12 @@ challenge duration / 6
 //   achievementsNumber?: number
 // ) => Challenge;
 
-
 export const startNewChallenge = (
   tasksList: Task[],
   challengesList: Challenge[],
-  challengeDuration: number = 30,
+  challengeDuration = 30,
   achievementsNumber: number = Math.floor(challengeDuration / 6)
 ): Challenge => {
-
   const startDate = new Date().getTime();
 
   const id = challengesList.length;
@@ -129,66 +135,83 @@ export const startNewChallenge = (
     .map((a) => a.value)
     .slice(0, challengeDuration);
 
-  let tasksStatus: Status[] = tasksList.map(i => ({ state: ItemState.PENDING, updated: new Date().getTime() }))
+  const tasksStatus: Status[] = tasksList.map((i) => ({
+    state: ItemState.PENDING,
+    updated: new Date().getTime()
+  }));
 
   const achievements = achievementsList
-    .filter(i => i.description !== "Complete all tasks" && i.description !== "Complete half of the tasks")
+    .filter(
+      (i) =>
+        i.description !== 'Complete all tasks' &&
+        i.description !== 'Complete half of the tasks'
+    )
     .map((a) => ({ sort: Math.random(), value: a }))
     .sort((a, b) => a.sort - b.sort)
     .map((a) => a.value)
-    .slice(0, achievementsNumber - 2)
+    .slice(0, achievementsNumber - 2);
 
   const achievementsStatus = achievementsList
-    .filter(i => i.description !== "Complete all tasks" && i.description !== "Complete half of the tasks")
+    .filter(
+      (i) =>
+        i.description !== 'Complete all tasks' &&
+        i.description !== 'Complete half of the tasks'
+    )
     .map((a) => ({ sort: Math.random(), value: a }))
     .sort((a, b) => a.sort - b.sort)
     .map((a) => a.value)
     .slice(0, achievementsNumber - 2)
-    .map(i => ({ state: ItemState.SUCCESS, updated: new Date().getTime() }))  // why we should return Status[]? why we map and filter?
+    .map((i) => ({ state: ItemState.SUCCESS, updated: new Date().getTime() })); // why we should return Status[]? why we map and filter?
 
   achievements.push({
-    "id": 1,
-    "description": "Complete half of the tasks",
-    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSK0iOiaEUaQzAsyagPoDxMDPn3bsBS0w5jWA&usqp=CAU",
-    "checkComplete": "Pending",
+    id: 1,
+    description: 'Complete half of the tasks',
+    image:
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSK0iOiaEUaQzAsyagPoDxMDPn3bsBS0w5jWA&usqp=CAU',
+    checkComplete: 'Pending',
     status: {
       state: ItemState.PENDING,
       updated: new Date().getTime()
     }
-  })
+  });
 
   achievements.push({
-    "id": 2,
-    "description": "Complete all tasks",
-    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRVtqF0pb1fYP4Vgm5AWuu3k-JAaQhHVJsG2w&usqp=CAU",
-    "checkComplete": "Pending",
+    id: 2,
+    description: 'Complete all tasks',
+    image:
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRVtqF0pb1fYP4Vgm5AWuu3k-JAaQhHVJsG2w&usqp=CAU',
+    checkComplete: 'Pending',
     status: {
       state: ItemState.PENDING,
       updated: new Date().getTime()
     }
-  })
+  });
 
-  achievementsStatus.push({ state: ItemState.SUCCESS, updated: new Date().getTime() })
-  achievementsStatus.push({ state: ItemState.SUCCESS, updated: new Date().getTime() })
+  achievementsStatus.push({
+    state: ItemState.SUCCESS,
+    updated: new Date().getTime()
+  });
+  achievementsStatus.push({
+    state: ItemState.SUCCESS,
+    updated: new Date().getTime()
+  });
 
   checkComplete(tasksStatus);
 
-  let result = {
+  const result = {
     id,
     state: ChallengeState.INPROGRESS,
     startDate,
     tasksOrder,
     tasksStatus,
-    achievementsStatus: achievementsStatus,
+    achievementsStatus: achievementsStatus
     // achievements
-  }
+  };
 
-  challengesList.push(result)
+  challengesList.push(result);
 
   return result;
-}
-
-
+};
 
 /**
  * Returns achievements statusfor the challenge by its achievements listand tasks status

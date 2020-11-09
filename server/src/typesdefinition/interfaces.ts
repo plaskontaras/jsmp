@@ -66,7 +66,7 @@ export interface Challenge {
   tasksOrder: Task[]; // {id: number; description: string;}
   tasksStatus: Status[]; // {'Pending', updated: 14151515}
   achievements?: Achievement[];
-  achievementsStatus: Status[]; 
+  achievementsStatus: Status[];
 }
 
 /**
