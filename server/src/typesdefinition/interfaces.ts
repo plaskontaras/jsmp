@@ -21,7 +21,7 @@ before 8:00 AM”
  */
 export interface Achievement extends Task {
   image: string;
-  checkComplete(tasksStatus: Status): ItemState;
+  checkComplete: ItemState;
 }
 
 /**
@@ -33,7 +33,7 @@ was updated
  */
 export interface Status {
   state: ItemState;
-  updated: Date;
+  updated: number;
 }
 
 /**
@@ -60,12 +60,13 @@ failed (<90% tasks completed)
 @param achievementsStatus - describes current status for all achievements in the challenge
  */
 export interface Challenge {
-  id: number;
-  state: ChallengeState;
-  startDate: Date;
-  tasksOrder: Task[];
-  tasksStatus: Status[];
-  achievementsStatus: Status[];
+  id: number; // 1
+  state: ChallengeState; // In Progress
+  startDate: number; // 184115150
+  tasksOrder: Task[]; // {id: number; description: string;}
+  tasksStatus: Status[]; // {'Pending', updated: 14151515}
+  achievements?: Achievement[];
+  achievementsStatus: Status[]; 
 }
 
 /**
