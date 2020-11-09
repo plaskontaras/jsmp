@@ -10,6 +10,12 @@
   ],
   "rules": {
     "no-console": 1, // Means warning
-    "prettier/prettier": 2 // Means error
+    "prettier/prettier": 2, // Means error
+    "no-debugger": 2,
+    "func-names": 0,
+    "import/extensions": 0,
+    "no-unused-expressions": "error",
+    "no-unused-vars": "off",
+    "no-shadow": "off"
   }
 }
