@@ -17,6 +17,6 @@
     "mode": "modules",
     "out": "docs"
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "src/services"],
   "exclude": ["src/**/*.spec.ts", "src/**/*.test.ts"]
 }

@@ -1,73 +1,57 @@
 {
-  "achievementsList": [
+  "actualAchievementsList": [
     {
-      "id": 1,
-      "description": "Complete half of the tasks",
-      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSK0iOiaEUaQzAsyagPoDxMDPn3bsBS0w5jWA&usqp=CAU",
-      "checkComplete": "Success",
-      "status": {
-        "state": "Pending",
-        "updated": 14154151515
-      }
-    },
-    {
-      "id": 2,
-      "description": "Complete all tasks",
-      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRVtqF0pb1fYP4Vgm5AWuu3k-JAaQhHVJsG2w&usqp=CAU",
-      "checkComplete": "Success",
-      "status": {
-        "state": "Pending",
-        "updated": 14154151515
-      }
-    },
-    {
-      "id": 3,
+      "itemId": 0,
       "description": "Complete 4 Monday's tasks",
       "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQk0VIWYGwdt6MzzTaHv3rseEa1OU8q8VxjLA&usqp=CAU",
-      "checkComplete": "Success",
       "status": {
         "state": "Pending",
-        "updated": 14154151515
+        "updated": 1415151515
       }
     },
     {
-      "id": 4,
+      "itemId": 1,
       "description": "Complete each task 7 days in a row",
       "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSrEV9De3KxSYy2Dmm2owJ2mGQcI4kyR_Hmbw&usqp=CAU",
-      "checkComplete": "Success",
       "status": {
         "state": "Pending",
-        "updated": 14154151515
+        "updated": 1415151515
       }
     },
     {
-      "id": 5,
+      "itemId": 2,
       "description": "Complete five tasks before 8:00 AM",
       "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTAW5PDsAv8qUxxNKqYTDOwS0ev06qhLbaDJA&usqp=CAU",
-      "checkComplete": "Success",
       "status": {
         "state": "Pending",
-        "updated": 14154151515
+        "updated": 1415151515
       }
     },
     {
-      "id": 6,
-      "description": "Complete five tasks before 9:00 AM",
+      "itemId": 3,
+      "description": "Complete seven tasks before 9:00 AM",
       "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTAW5PDsAv8qUxxNKqYTDOwS0ev06qhLbaDJA&usqp=CAU",
-      "checkComplete": "Success",
       "status": {
         "state": "Pending",
-        "updated": 14154151515
+        "updated": 1415151515
       }
     },
     {
-      "id": 7,
-      "description": "Complete five tasks before 10:00 AM",
+      "itemId": 4,
+      "description": "Complete fifteen tasks before 10:00 AM",
       "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTAW5PDsAv8qUxxNKqYTDOwS0ev06qhLbaDJA&usqp=CAU",
-      "checkComplete": "Success",
       "status": {
         "state": "Pending",
-        "updated": 14154151515
+        "updated": 1415151515
+      }
+    },
+    {
+      "itemId": 5,
+      "description": "Complete half of the tasks",
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSK0iOiaEUaQzAsyagPoDxMDPn3bsBS0w5jWA&usqp=CAU",
+      "status": {
+        "state": "Pending",
+        "updated": 1415151515
       }
     }
   ]
