@@ -1,7 +1,13 @@
 {
     "parser": "babel-eslint",
     "rules": {
-        "no-unused-vars": "error"
+        "no-unused-vars": "error",
+        "no-console": 1, // Means warning
+        "no-debugger": 2,
+        "func-names": 0,
+        "import/extensions": 0,
+        "no-unused-expressions": "error",
+        "no-shadow": "off"
     },
     "env": {
         "es6": true,
