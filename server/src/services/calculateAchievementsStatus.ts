@@ -1,19 +1,35 @@
 import { CalculateAchievementsStatus } from '../types/interfaces';
-import { loadAchievements } from '../mockdata/checkComplete';
-const achievements = loadAchievements();
 
 export const calculateAchievementsStatus: CalculateAchievementsStatus = (
+  challengeId,
+  challenges,
   achievements,
   tasksStatus
 ) => {
-  const statuses = new Map();
+  const calculatedStatuses = new Map();
+  const passedTasks = [];
 
-  achievements.forEach((achievement) => {
-    statuses.set(achievement.itemId, tasksStatus);
-  });
+  for (const key in tasksStatus) {
+    if (tasksStatus[key].state === 'Success') {
+      passedTasks.push(tasksStatus[key]);
+    }
+  }
 
-  // statuses.set(2, { state: 'Pending', updated: Date.now() })
-  // statuses.set(4, { state: 'Pending', updated: Date.now() })
-  return statuses;
-  // return { 2: { state: 'Pending', updated: Date.now() }, 4: { state: 'Pending', updated: Date.now() } }
+  const currentChallenge = challenges.find(
+    (i) => i.challengeId === challengeId
+  );
+
+  if (!currentChallenge) {
+    throw new Error('required challenge does not exsit!');
+  }
+
+  const actualAchievementsList = currentChallenge.achievementsStatus;
+
+  for (const achievement in actualAchievementsList) {
+    const newStatus = achievements[achievement].checkComplete(passedTasks);
+    const key = +achievement;
+    calculatedStatuses.set(key, newStatus);
+  }
+
+  return calculatedStatuses;
 };

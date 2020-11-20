@@ -1,12 +1,10 @@
 import { challenges } from './../mockdata/challenges';
 import { getAchievements } from './getAchievements';
-import { actualAchievementsList } from '../mockdata/achivements.json';
-import { ActualAchievement } from '../types/interfaces';
 
 describe('getAchievements:', () => {
   test('should return Error with message "required challenge does not exsit!" if required challengeId does not exist in challenges list', () => {
     expect(() => {
-      getAchievements(4, challenges);
+      getAchievements(415151, challenges);
     }).toThrow('required challenge does not exsit!');
   });
 

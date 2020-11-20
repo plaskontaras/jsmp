@@ -6,14 +6,7 @@ export const getCurrentTask: GetCurrentTask = (challengeId, challenges) => {
   );
 
   if (!currentChallenge) {
-    return {
-      itemId: 2,
-      description: 'FakeTask',
-      status: {
-        state: 'Pending',
-        updated: Date.now()
-      }
-    };
+    throw new Error('required challenge does not exsit!');
   }
 
   const actualTaskNumber =

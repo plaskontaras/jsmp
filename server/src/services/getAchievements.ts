@@ -1,8 +1,7 @@
-import { ActualAchievement } from './../types/interfaces';
-import { GetAchievements } from '../types/interfaces';
-import { loadAchievements } from '../mockdata/checkComplete';
+import { GetAchievements } from './../types/interfaces';
+import { allAchievements } from '../mockdata/achivements.json';
 
-const actualaAchievementsList = loadAchievements();
+const allAchievementsList = allAchievements;
 
 export const getAchievements: GetAchievements = (
   challengeId: number,
@@ -16,28 +15,29 @@ export const getAchievements: GetAchievements = (
     throw new Error('required challenge does not exsit!');
   }
 
-  const result: ActualAchievement[] = [];
+  const result = [];
 
   const achievementsStatus = currentChallenge.achievementsStatus;
 
   for (const achievement in achievementsStatus) {
-    const status = achievementsStatus[achievement];
+    const CurrentAchievementStatus = {
+      state: achievementsStatus[achievement].state,
+      updated: achievementsStatus[achievement].updated
+    };
 
-    const currentAchievement = actualaAchievementsList.find(
-      (i) => i.itemId === +achievement
+    const currentAchievement = allAchievementsList.find(
+      (a) => a.itemId === +achievement
     );
 
     if (currentAchievement) {
-      const x = {
+      const actualAchievement = {
         itemId: currentAchievement.itemId,
         description: currentAchievement.description,
         image: currentAchievement.image,
-        status
+        status: CurrentAchievementStatus
       };
 
-      result.push(x);
-    } else {
-      throw new Error('fail');
+      result.push(actualAchievement);
     }
   }
 

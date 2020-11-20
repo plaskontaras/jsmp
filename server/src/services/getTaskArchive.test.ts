@@ -4,7 +4,7 @@ import { challenges } from './../mockdata/challenges';
 describe('getAchievements:', () => {
   test('should return Error with message "required challenge does not exsit!" if required challengeId does not exist in challenges list', () => {
     expect(() => {
-      getTaskArchive(4, challenges);
+      getTaskArchive(415116, challenges);
     }).toThrow('required challenge does not exsit!');
   });
 

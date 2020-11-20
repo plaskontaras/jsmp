@@ -1,6 +1,5 @@
 import {
   StartNewChallenge,
-  Task,
   Challenge,
   Status,
   ActualAchievement
@@ -11,8 +10,9 @@ export const startNewChallenge: StartNewChallenge = (
   achievementsList,
   challengeDuration = 30
 ) => {
-  let tasksOrder: Task[] = shuffleArray(tasksList);
-  tasksOrder = tasksOrder.slice(0, challengeDuration);
+  const startNewChallengeDate = new Date().getTime();
+
+  const tasksOrder = getShuffledArray(tasksList, challengeDuration);
 
   const achievementsAmount = Math.floor(challengeDuration / 6);
   const achievementsStatus = generateAchievementsStatus(
@@ -20,29 +20,43 @@ export const startNewChallenge: StartNewChallenge = (
     achievementsAmount
   );
 
-  const tasksStatus = generateTasksStatus(tasksList, challengeDuration);
+  const tasksStatus: Record<number, Status> = {};
 
-  const result: Challenge = {
-    challengeId: Date.now() + 111,
+  tasksOrder.forEach((i) => {
+    const id = i.itemId;
+    tasksStatus[id] = { state: 'Pending', updated: startNewChallengeDate };
+  });
+
+  const newChallenge: Challenge = {
+    challengeId: Date.now(),
     challengeState: 'In Progress',
-    startDate: new Date(),
+    startDate: new Date(startNewChallengeDate),
     tasksOrder,
     tasksStatus,
     achievementsStatus
   };
 
-  return result;
+  return newChallenge;
 };
 
-function shuffleArray<T>(array: T[]): T[] {
-  const result = array
-    .map((a) => ({ sort: Math.random(), value: a }))
-    .sort((a, b) => a.sort - b.sort)
-    .map((a) => a.value);
+function getRandomInteger(min: number, max: number) {
+  return Math.floor(Math.random() * (max - min)) + min;
+}
 
-  // if(array.every( (item,index) => item === result[index])) {
-  //     shuffleArray(array)
-  // }
+function getShuffledArray<T>(array: T[], numberOfElements: number): T[] {
+  const shuffleNumbers: number[] = [];
+  const result: T[] = [];
+
+  do {
+    const num = getRandomInteger(0, numberOfElements);
+    if (!shuffleNumbers.includes(num)) {
+      shuffleNumbers.push(num);
+    }
+  } while (shuffleNumbers.length < numberOfElements);
+
+  for (let i = 0; i < shuffleNumbers.length; i++) {
+    result.push(array[shuffleNumbers[i]]);
+  }
 
   return result;
 }
@@ -51,18 +65,17 @@ function generateAchievementsStatus(
   achievementsList: ActualAchievement[],
   achievementsAmount: number
 ): Record<number, Status> {
-  const result = shuffleArray(
+  const result = getShuffledArray(
     achievementsList.filter(
       (i) =>
         i.description !== 'Complete half of the tasks' &&
         i.description !== 'Complete all tasks'
-    )
-  )
-    .slice(0, achievementsAmount - 2)
-    .reduce(function (acc: any, cur: any) {
-      acc[cur.itemId] = { state: 'Pending', updated: new Date().getTime() };
-      return acc;
-    }, {});
+    ),
+    achievementsAmount - 2
+  ).reduce(function (acc: any, cur: any) {
+    acc[cur.itemId] = { state: 'Pending', updated: new Date().getTime() };
+    return acc;
+  }, {});
 
   const halfOfTasksAchievement = achievementsList.find((i) => {
     return i.description === 'Complete half of the tasks';
@@ -89,20 +102,6 @@ function generateAchievementsStatus(
   } else {
     throw new Error('achievement "Complete all tasks" does not exist!');
   }
-
-  return result;
-}
-
-function generateTasksStatus(
-  tasksList: Task[],
-  challengeDuration: number
-): Record<number, Status> {
-  const result = tasksList
-    .slice(0, challengeDuration)
-    .reduce(function (acc: any, cur: any) {
-      acc[cur.itemId] = { state: 'Pending', updated: new Date().getTime() };
-      return acc;
-    }, {});
 
   return result;
 }
