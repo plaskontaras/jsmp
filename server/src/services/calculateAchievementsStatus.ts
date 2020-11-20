@@ -1,19 +1,34 @@
 import { CalculateAchievementsStatus } from '../types/interfaces';
-import { loadAchievements } from '../mockdata/checkComplete';
-const achievements = loadAchievements();
+import { getCurrentChallenge } from './helpers/getCurrentChallenge';
+import { AchievementCompleteCheckers } from './checkers';
 
 export const calculateAchievementsStatus: CalculateAchievementsStatus = (
-  achievements,
-  tasksStatus
+  challengeId,
+  challenges
 ) => {
-  const statuses = new Map();
+  const calculatedStatuses = new Map();
 
-  achievements.forEach((achievement) => {
-    statuses.set(achievement.itemId, tasksStatus);
-  });
+  const currentChallenge = getCurrentChallenge(challengeId, challenges);
+  const passedTasks = [];
+  const tasksStatus = currentChallenge.tasksStatus;
 
-  // statuses.set(2, { state: 'Pending', updated: Date.now() })
-  // statuses.set(4, { state: 'Pending', updated: Date.now() })
-  return statuses;
-  // return { 2: { state: 'Pending', updated: Date.now() }, 4: { state: 'Pending', updated: Date.now() } }
+  const achievements = currentChallenge.achievementsStatus;
+
+  for (const key in tasksStatus) {
+    if (tasksStatus[key].state === 'Success') {
+      passedTasks.push(tasksStatus[key]);
+    }
+  }
+
+  for (const achievement in achievements) {
+    const key = +achievement;
+    const checker = AchievementCompleteCheckers.get(key);
+
+    if (checker) {
+      const newStatus = checker(passedTasks);
+      calculatedStatuses.set(key, newStatus);
+    }
+  }
+
+  return calculatedStatuses;
 };

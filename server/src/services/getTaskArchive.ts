@@ -1,26 +1,22 @@
-import { ArchiveItem, GetTaskArchive, Task } from '../types/interfaces';
+import { GetTaskArchive } from '../types/interfaces';
+import { getCurrentChallenge } from './helpers/getCurrentChallenge';
 
 export const getTaskArchive: GetTaskArchive = (id, challenges) => {
-  const currentChallenge = challenges.find((i) => i.challengeId === id);
-
-  if (!currentChallenge) {
-    throw new Error('required challenge does not exsit!');
-  }
-
-  const result: ArchiveItem[] = [];
+  const currentChallenge = getCurrentChallenge(id, challenges);
+  const result = [];
   const tasksOrder = currentChallenge.tasksOrder;
-  const actualDate = new Date().getDate();
+  const currentDate = new Date().getDate();
   const currentChallengeStartDate = currentChallenge.startDate.getDate();
-  const pastTasks: Task[] = tasksOrder.slice(
+  const pastTasks = tasksOrder.slice(
     0,
-    actualDate - currentChallengeStartDate
+    currentDate - currentChallengeStartDate
   );
 
   for (let i = 0; i < pastTasks.length; i++) {
     result.push({
-      itemId: pastTasks[i].itemId,
+      id: pastTasks[i].id,
       description: pastTasks[i].description,
-      status: currentChallenge.tasksStatus[i]
+      status: { ...currentChallenge.tasksStatus[pastTasks[i].id] }
     });
   }
 

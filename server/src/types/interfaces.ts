@@ -1,4 +1,14 @@
+/**
+ * Challenge state - can be: In Progress,
+Success, Failure
+ */
 export type ChallengeState = 'In Progress' | 'Success' | 'Failure';
+
+/**
+ * ItemState describes a state of
+some item (a task or an
+achievement)
+ */
 export type ItemState = 'Pending' | 'Success' | 'Failure';
 
 /**
@@ -7,19 +17,15 @@ that should be done by the user. For example: “Go for a 10
 minutes run” or “Go to bed before 11:00 PM”
 */
 export interface Task {
-  itemId: number;
+  id: number;
   description: string;
 }
-// Example
-const task: Task = {
-  itemId: 1,
-  description: 'Go to bed before 11:00 PM'
-};
 
 /**
  * A method in Achievement that can return an achievement status by tasks status.
  */
-export type CheckComplete = (tasksStatus: Status[]) => ItemState;
+export type CheckComplete = (tasksStatus: Record<number, Status>) => ItemState;
+// export type CheckComplete = (tasksStatus: Status[]) => ItemState;
 
 /**
  * Achievement describes a set of
@@ -34,16 +40,6 @@ export interface Achievement extends Task {
   image: string;
   checkComplete: CheckComplete;
 }
-// Example
-const achievement: Achievement = {
-  itemId: 1,
-  description: 'Complete half of the tasks',
-  image:
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSK0iOiaEUaQzAsyagPoDxMDPn3bsBS0w5jWA&usqp=CAU',
-  checkComplete(tasksStatus) {
-    return 'Pending';
-  }
-};
 
 /**
  * Status describes a state of
@@ -56,11 +52,6 @@ export interface Status {
   state: ItemState;
   updated: number;
 }
-// Example
-const status = {
-  state: 'Pending',
-  updated: new Date()
-};
 
 /**
  * Challenge describes a 30-days
@@ -86,28 +77,13 @@ failed (<90% tasks completed)
 @param achievementsStatus - describes current status for all achievements in the challenge
  */
 export interface Challenge {
-  challengeId: number; // 1
-  challengeState: ChallengeState; // ChallengeState.INPROGRESS <=> 'In Progress'
-  startDate: Date; // 184115150
-  tasksOrder: Task[]; // [{id: 121, description: 'Go to bed before 11:00 PM'} * 30]
-  tasksStatus: Record<number, Status>; // {4: {state: ItemState.PENDING, updated:Date.now()}}
-  achievementsStatus: Record<number, Status>; // {2: {state: ItemState.PENDING, updated:Date.now()}}
+  challengeId: number;
+  challengeState: ChallengeState;
+  startDate: Date;
+  tasksOrder: Task[];
+  tasksStatus: Record<number, Status>;
+  achievementsStatus: Record<number, Status>;
 }
-// Example
-const cha1: Challenge = {
-  challengeId: 2,
-  challengeState: 'In Progress',
-  startDate: new Date(),
-  tasksOrder: [
-    { itemId: 121, description: 'Go to bed before 11:00 PM' },
-    { itemId: 15111, description: 'Go to bed before 21:00 PM' }
-  ],
-  tasksStatus: { 4: { state: 'Pending', updated: Date.now() } },
-  achievementsStatus: {
-    2: { state: 'Pending', updated: Date.now() },
-    4: { state: 'Pending', updated: Date.now() }
-  }
-};
 
 /**
  * ArchiveItem describes a task
@@ -117,15 +93,6 @@ in the challenge
 export interface ArchiveItem extends Task {
   status: Status;
 }
-// Example
-const archiveItem: ArchiveItem = {
-  itemId: 15151515,
-  description: 'Go to bed before 11:00 PM',
-  status: {
-    state: 'Pending',
-    updated: Date.now()
-  }
-};
 
 /**
  * ActualTask provides
@@ -136,15 +103,6 @@ the challenge
 export interface ActualTask extends Task {
   status: Status;
 }
-// Example
-const actualTask: ActualTask = {
-  itemId: 15151515,
-  description: 'Go to bed before 11:00 PM',
-  status: {
-    state: 'Pending',
-    updated: Date.now()
-  }
-};
 
 /**
  * ActualAchievement provides
@@ -156,16 +114,6 @@ challenge
 export interface ActualAchievement extends Omit<Achievement, 'checkComplete'> {
   status: Status;
 }
-// Example
-const actualAchievement: ActualAchievement = {
-  itemId: 15151515,
-  description: 'Go to bed before 11:00 PM',
-  image: 'http://image',
-  status: {
-    state: 'Pending',
-    updated: Date.now()
-  }
-};
 
 /**
  * Should find a
@@ -241,6 +189,8 @@ export type StartNewChallenge = (
  * @param taskStatus - tasks status
  */
 export type CalculateAchievementsStatus = (
-  achievements: Achievement[],
-  tasksStatus: Record<number, Status>
+  challengeId: number,
+  challenges: Challenge[]
+  // achievements: Achievement[],
+  // tasksStatus: Record<number, Status>
 ) => Map<number, Status>;
