@@ -11,7 +11,7 @@ const achievementsList: ActualAchievement[] = generateActualAchievementsList(
 describe('startNewChallenge: ', () => {
   let challenge1: Challenge;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     challenge1 = startNewChallenge(tasks, achievementsList);
   });
 

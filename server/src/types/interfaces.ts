@@ -177,6 +177,7 @@ challenge duration that by default should be 30
 days, number of achievements – by default,
 challenge duration / 6
  */
+
 export type StartNewChallenge = (
   tasksList: Task[],
   achievementsList: ActualAchievement[],
