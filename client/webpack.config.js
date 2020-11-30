@@ -60,6 +60,10 @@ module.exports = {
     devtool: isDev ? 'source-map' : '',
     devServer: {
         port: 3000,
+        proxy: {
+            '/**': { target: 'http://localhost:5000', secure: false },
+            '/socket': { target: 'ws://localhost:5000', ws: true },
+        },
         hot: isDev,
     },
     plugins: [
