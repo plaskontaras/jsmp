@@ -6,9 +6,27 @@
         <link rel="icon" href="favicon.ico" type="image/icon" />
         <title>JSMP</title>
     </head>
+
     <body>
-        <div class="container">
-            <h1>Hi</h1>
-        </div>
+        <script src="/socket.io/socket.io.js"></script>
+
+        <input id="finish-task-button" type="button" value="Finish current task" />
+
+        <script>
+            const socket = io.connect('/taskUpdate');
+
+            const fisnishTaskButton = document.getElementById(
+                'finish-task-button'
+            );
+            fisnishTaskButton.addEventListener('click', fisnishTask);
+
+            function fisnishTask() {
+                socket.emit('task status was updated', 'Success');
+            }
+
+            socket.on('achievements was updated', (msg) => {
+                console.log(msg);
+            });
+        </script>
     </body>
 </html>
