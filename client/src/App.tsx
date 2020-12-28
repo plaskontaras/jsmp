@@ -4,7 +4,7 @@ import { hot } from 'react-hot-loader';
 
 const App: React.FC = () => {
     return (
-        <h1>Hi</h1>
+        <h1>Hi!</h1>
     )
 
 };
