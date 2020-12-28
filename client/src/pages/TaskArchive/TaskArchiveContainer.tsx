@@ -13,7 +13,6 @@ class TaskArchiveContainer extends React.Component<any> {
                     this.props.setTaskArchive(res.data);
                 }
             });
-
     }
 
     render() {

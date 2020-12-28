@@ -6,6 +6,8 @@ import axios from 'axios';
 const qs = require('querystring');
 
 export const Login: React.FC = () => {
+    console.log(navigator.userAgent);
+    const OS = navigator.platform;
     const auth = useContext(AuthContext);
     const [form, setForm] = useState({
         email: '',
@@ -84,13 +86,15 @@ export const Login: React.FC = () => {
                 .catch((err) => {
                     console.log(err);
                 });
-        } catch (e) {}
+        } catch (e) { }
     };
 
     return (
         <div className="row">
             <div>
                 <h1>Challenge</h1>
+                <p>"Hello my {OS} friend" </p>
+                <p>You are {navigator.onLine && 'online' || 'offline' !}</p>
                 <div>
                     <div>
                         <span>Autorization</span>

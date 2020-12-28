@@ -42,6 +42,7 @@ class ActiveChallengeContainer extends React.Component<any> {
     };
 
     onFinishCurrentTask = (achievements: any) => {
+        window.navigator.vibrate([200, 100, 200]);
         axios
             .post('http://localhost:5000/api/cas', {}, this.config2)
             .then((res) => {
