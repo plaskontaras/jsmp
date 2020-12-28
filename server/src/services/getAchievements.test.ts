@@ -3,14 +3,6 @@ import { allAchievements } from '../mockDB/achivements.json';
 import { tasks } from '../mockDB/tasks.json';
 import { Challenge, Status } from './../types/interfaces';
 
-const tasksStatus: Record<number, Status> = tasks
-  .slice(0, 30)
-  .reduce(function (acc: any, cur) {
-    const ids = cur.id;
-    acc[ids] = { state: 'Pending', updated: new Date() };
-    return acc;
-  }, {});
-
 const achievementsStatus: Record<number, Status> = allAchievements
   .slice(0, 5)
   .reduce(function (acc: any, cur) {
@@ -25,7 +17,7 @@ const challengeWithFiveAchievemnts: Challenge[] = [
     challengeState: 'In Progress',
     startDate: new Date(),
     tasksOrder: tasks.slice(0, 30),
-    tasksStatus,
+    tasksStatus: {},
     achievementsStatus
   }
 ];
@@ -79,15 +71,6 @@ describe('getAchievements:', () => {
         description: "Complete 4 Sunday's tasks",
         image:
           'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTAW5PDsAv8qUxxNKqYTDOwS0ev06qhLbaDJA&usqp=CAU',
-        status: {
-          state: 'Pending',
-          updated: new Date()
-        }
-      },
-      5: {
-        description: 'Complete each task 7 days in a row',
-        image:
-          'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSK0iOiaEUaQzAsyagPoDxMDPn3bsBS0w5jWA&usqp=CAU',
         status: {
           state: 'Pending',
           updated: new Date()

@@ -1,23 +1,30 @@
-import { GetTaskArchive } from '../types/interfaces';
+import { ActualTask, Challenge, GetTaskArchive } from '../types/interfaces';
 import { getCurrentChallenge } from './helpers/getCurrentChallenge';
 
-export const getTaskArchive: GetTaskArchive = (id, challenges) => {
+export const getTaskArchive: GetTaskArchive = (
+  id: number,
+  challenges: Challenge[]
+) => {
   const currentChallenge = getCurrentChallenge(id, challenges);
   const result = [];
-  const tasksOrder = currentChallenge.tasksOrder;
+  const tasksStatus = currentChallenge.tasksStatus;
   const currentDate = new Date().getDate();
-  const currentChallengeStartDate = currentChallenge.startDate.getDate();
-  const pastTasks = tasksOrder.slice(
-    0,
-    currentDate - currentChallengeStartDate
-  );
 
-  for (let i = 0; i < pastTasks.length; i++) {
-    result.push({
-      id: pastTasks[i].id,
-      description: pastTasks[i].description,
-      status: { ...currentChallenge.tasksStatus[pastTasks[i].id] }
-    });
+  for (const key in tasksStatus) {
+    if (
+      tasksStatus[key].state === 'Success' ||
+      tasksStatus[key].state === 'Failure'
+    ) {
+      const status = tasksStatus[key];
+      const id = currentChallenge.tasksOrder.find((t) => t.id === +key)!.id;
+      const description = currentChallenge.tasksOrder.find(
+        (t) => t.id === +key
+      )!.description;
+
+      const passedTask: ActualTask = { status, id, description };
+
+      result.push(passedTask);
+    }
   }
 
   return result;

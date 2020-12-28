@@ -5,6 +5,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsWebpackPlugin = require('optimize-css-assets-webpack-plugin');
 const TerserWebpackPlugin = require('terser-webpack-plugin');
+const { HotModuleReplacementPlugin } = require('webpack');
 
 const isDev = process.env.NODE_ENV === 'development';
 const isProd = !isDev;
@@ -44,31 +45,46 @@ const jsLoaders = () => {
     return loaders;
 };
 
-const filename = (ext) => (isDev ? `[name].${ext}` : `[name].[hash].${ext}`);
+// const filename = (ext) => (isDev ? `[name].${ext}` : `[name].[hash].${ext}`);
 
 module.exports = {
     context: path.resolve(__dirname, 'src'),
     mode: 'development',
     entry: {
-        main: ['@babel/polyfill', './index.ts'],
+        // main: ['@babel/polyfill', './index.ts'],
+        main: ['@babel/polyfill', './index.tsx'],
     },
     output: {
-        filename: filename('js'),
-        path: path.resolve(__dirname, 'dist'),
+        // filename: filename('js'),
+        // filename: filename('bundle.js'),
+        filename: 'bundle.js',
+        path: path.resolve(__dirname, 'dist/'),
+        publicPath: '/dist/',
     },
-    optimization: getOptimization(),
+    // optimization: getOptimization(),
     devtool: isDev ? 'source-map' : '',
+
+    // devServer: {
+    //     historyApiFallback: true,
+    //     contentBase: './',
+    //     hot: true
+    // },
     devServer: {
         port: 3000,
-        proxy: {
-            '/**': { target: 'http://localhost:5000', secure: false },
-            '/socket': { target: 'ws://localhost:5000', ws: true },
-        },
-        hot: isDev,
+        historyApiFallback: true,
+        contentBase: path.join(__dirname, 'public/'),
+        // publicPath: 'http://localhost:3000/dist/',
+        // proxy: {
+            // '/**': { target: 'http://localhost:5000', secure: false },
+            //     '/socket': { target: 'ws://localhost:5000', ws: true },
+        // },
+        hot: true,
+        // hotOnly: isDev,
     },
     plugins: [
+        new HotModuleReplacementPlugin(),
         new HtmlWebpackPlugin({
-            template: './index.html',
+            template: '../public/index.html',
             minify: isProd,
         }),
         new CleanWebpackPlugin(),
@@ -81,34 +97,38 @@ module.exports = {
             ],
         }),
         new MiniCssExtractPlugin({
-            filename: filename('css'),
+            // filename: filename('css'),
+            filename: '../dist/index.css',
         }),
     ],
     module: {
         rules: [
             {
                 test: /\.css$/,
-                use: [
-                    {
-                        loader: MiniCssExtractPlugin.loader,
-                        options: {
-                            hmr: isDev,
-                            reloadAll: true,
-                        },
-                    },
-                    'css-loader',
-                ],
+                use: ["style-loader", "css-loader"]
+                // [
+                //     {
+                //         loader: MiniCssExtractPlugin.loader,
+                //         options: {
+                //             hmr: isDev,
+                //             reloadAll: true,
+                //         },
+                //     },
+                //     'css-loader',
+                // ]
+                ,
             },
             {
                 test: /\.s[ac]ss$/,
                 use: [
-                    {
-                        loader: MiniCssExtractPlugin.loader,
-                        options: {
-                            hmr: isDev,
-                            reloadAll: true,
-                        },
-                    },
+                    // {
+                    //     loader: MiniCssExtractPlugin.loader,
+                    //     options: {
+                    //         hmr: isDev,
+                    //         reloadAll: true,
+                    //     },
+                    // },
+                    "style-loader",
                     'css-loader',
                     'sass-loader',
                 ],
@@ -136,6 +156,12 @@ module.exports = {
                     },
                 },
             },
+            {
+                test: /\.tsx?$/,
+                use: 'ts-loader',
+                exclude: /node_modules/,
+            },
         ],
     },
+    resolve: { extensions: [".ts", ".tsx", ".js", ".jsx", ".json"] }
 };

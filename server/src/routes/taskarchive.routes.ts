@@ -1,23 +1,21 @@
-// import { tasks } from '../mockDB/tasks.json';
-// import { allAchievements } from '../mockDB/achivements.json';
-import { Request, Response } from 'express';
-import { Challenge } from '../models/Challenge';
+import { Response } from 'express';
+import ChallengeModel from '../models/Challenge';
 import { getTaskArchive } from '../services/getTaskArchive';
-
-const UserModel = require('../models/User');
+import { Challenge } from '../types/interfaces';
 
 const express = require('express');
 const router = express.Router();
 
-router.get('/', async (req: Request, res: Response) => {
+router.get('/', async (req: any, res: Response) => {
   try {
-    const challenges: any = [];
-    const user = await UserModel.findOne({ email: req.body.email });
-    const currentChallenge = await Challenge.findOne({ owner: user._id });
+    const challenges: Challenge[] = [];
+    const currentChallenge = await ChallengeModel.findOne({
+      owner: req.user._id
+    });
 
-    challenges.push({ ...currentChallenge.toJSON() });
+    challenges.push({ ...currentChallenge!.toJSON() });
     const currentTaskArchive = getTaskArchive(
-      currentChallenge.challengeId,
+      currentChallenge!.challengeId,
       challenges
     );
 
@@ -28,11 +26,3 @@ router.get('/', async (req: Request, res: Response) => {
 });
 
 module.exports = router;
-
-// app.get('/taskarchive', (req: any, res: any) => {
-//   const challengeAchievements = getTaskArchive(
-//     challenges[0].challengeId,
-//     challenges
-//   );
-//   res.send(JSON.stringify(challengeAchievements));
-// });

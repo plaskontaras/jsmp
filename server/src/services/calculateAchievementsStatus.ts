@@ -31,4 +31,5 @@ export const calculateAchievementsStatus: CalculateAchievementsStatus = (
   }
 
   return calculatedStatuses;
+  // return currentChallenge.achievementsStatus;
 };
