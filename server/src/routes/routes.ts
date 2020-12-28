@@ -1,23 +1,20 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
 const express = require('express');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
-
 const router = express.Router();
-
-// import { Document } from 'mongoose';
-
-// interface IUser extends Document {
-
-// }
 
 router.post(
   '/signup',
   passport.authenticate('signup', { session: false }),
   async (req: any, res: Response, next: NextFunction) => {
+    const { email, password } = req.user;
+
     res.json({
-      message: 'Signup successful',
-      user: req.user
+      message: 'User was created! Signup successful!',
+      user: req.user,
+      email,
+      password
     });
   }
 );
@@ -27,7 +24,6 @@ router.post('/login', async (req: any, res: Response, next: NextFunction) => {
     try {
       if (err || !user) {
         const error = new Error('An error occurred.');
-
         return next(error);
       }
 
@@ -35,11 +31,10 @@ router.post('/login', async (req: any, res: Response, next: NextFunction) => {
         if (error) return next(error);
 
         const body = { _id: user._id, email: user.email };
-        const token = jwt.sign({ user: body }, 'TOP_SECRET');
-        // const id = jwt.sign({ userId: body._id }, 'TOP_SECRET');
-
-        // return res.json({ token, id });
-        return res.json({ token });
+        const token = jwt.sign({ user: body }, 'TOP_SECRET', {
+          expiresIn: '1h'
+        });
+        return res.json({ token, userId: body._id });
       });
     } catch (error) {
       return next(error);

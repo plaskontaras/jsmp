@@ -22,25 +22,10 @@ describe('getAchievements:', () => {
   });
 
   test('should return expected amount of past tasks for challenge started three days ago', () => {
-    const expected = [
-      {
-        id: 16160,
-        description: 'Go to bed before 11:00 PM',
-        status: {}
-      },
-      {
-        id: 6161,
-        description:
-          'Become a patron for a creator you like on patreon.com or a similar service',
-        status: {}
-      },
-      {
-        id: 2666,
-        description: 'Take a picture of a sunset',
-        status: {}
-      }
-    ];
+    const expected = 0;
 
-    expect(getTaskArchive(2, threeDaysAgoStartedChallenge)).toEqual(expected);
+    expect(getTaskArchive(2, threeDaysAgoStartedChallenge).length).toBe(
+      expected
+    );
   });
 });

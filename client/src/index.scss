@@ -1,10 +1,5 @@
 $base-color: green;
 
-button {
-    color: $base-color;
-    width: 400px;
-}
-
 h1 {
-    color: red;
+    color: $base-color;
 }

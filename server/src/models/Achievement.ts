@@ -1,9 +1,20 @@
-const { Schema, model } = require('mongoose');
+import mongoose, { Schema, Document } from 'mongoose';
 
-export const achievementSchema = new Schema({
+export interface AchievementInterface extends Document {
+  id: number;
+  description: string;
+  image: string;
+}
+
+const AchievementSchema: Schema = new Schema({
   id: Number,
   description: String,
   image: String
 });
 
-export const Achievement = model('Achievement', achievementSchema);
+const Achievement = mongoose.model<AchievementInterface>(
+  'Achievement',
+  AchievementSchema
+);
+
+export default Achievement;

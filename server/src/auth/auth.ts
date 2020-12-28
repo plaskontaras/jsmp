@@ -1,6 +1,6 @@
+import User from '../models/User';
 const passport = require('passport');
 const localStrategy = require('passport-local').Strategy;
-const UserModel = require('../models/User');
 const JWTstrategy = require('passport-jwt').Strategy;
 const ExtractJWT = require('passport-jwt').ExtractJwt;
 
@@ -11,9 +11,9 @@ passport.use(
       usernameField: 'email',
       passwordField: 'password'
     },
-    async (email, password, done) => {
+    async (email: string, password: string, done: any) => {
       try {
-        const user = await UserModel.create({ email, password });
+        const user = await User.create({ email, password });
 
         return done(null, user);
       } catch (error) {
@@ -30,9 +30,9 @@ passport.use(
       usernameField: 'email',
       passwordField: 'password'
     },
-    async (email, password, done) => {
+    async (email: string, password: string, done: any) => {
       try {
-        const user = await UserModel.findOne({ email });
+        const user = await User.findOne({ email });
 
         if (!user) {
           return done(null, false, { message: 'User not found' });
@@ -58,7 +58,8 @@ passport.use(
       secretOrKey: 'TOP_SECRET',
       jwtFromRequest: ExtractJWT.fromUrlQueryParameter('secret_token')
     },
-    async (token, done) => {
+
+    async (token: any, done: any) => {
       try {
         return done(null, token.user);
       } catch (error) {
